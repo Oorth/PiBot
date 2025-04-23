@@ -64,7 +64,7 @@ int main() {
     if (!rawBuf) { fprintf(stderr, "Malloc failed\n"); return 1; }
 
     int frameCount = 0;
-    while (frameCount < 300) { // capture 300 frames (~10 seconds)
+    while (frameCount < 150) { // capture 150 frames (~5 seconds)
         // Capture ROI
         BitBlt(hMem, 0, 0, ROI_W, ROI_H, hScreen, x0, y0, SRCCOPY);
         BITMAPINFOHEADER bi = {};
