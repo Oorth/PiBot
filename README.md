@@ -16,7 +16,7 @@
 
 Hi, this is an Hardware Level AimBot for a game called VALORANT..
 Bypasses all Kernel mode defences setup by RIOT, by Running the Cheat in a seperate hardware and hence Undetectable :)
->~~What will be you move now RIOT?~~
+>~~What will be your move now RIOT?~~
 
 ## Requirements
 ```markdown
