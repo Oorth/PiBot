@@ -11,8 +11,8 @@
 #include <string>
 #include "DbgMacros.h"
 
-static const int ROI_W        = 200;
-static const int ROI_H        = 200;
+static const int ROI_W        = 400;
+static const int ROI_H        = 400;
 static const int FPS_DELAY_MS = 33;       // ~30 FPS
 static const char* OUTPUT_DIR = "captures";
 
@@ -62,8 +62,11 @@ int main()
     // Compute ROI centered on screen
     int screenW = GetSystemMetrics(SM_CXSCREEN);
     int screenH = GetSystemMetrics(SM_CYSCREEN);
-    int x0 = (screenW - ROI_W) / 2;
-    int y0 = (screenH - ROI_H) / 2;
+    // int x0 = (screenW - ROI_W) / 2;
+    // int y0 = (screenH - ROI_H) / 2;
+
+    int x0 = (screenW) / 2;
+    int y0 = ((screenH) / 2) -  ROI_H / 4 ;
 
     // Prepare DCs
     HDC hScreen = GetDC(NULL);
@@ -100,6 +103,13 @@ int main()
             break;
         }
         
+        // HPEN pen = CreatePen(PS_SOLID, 2, RGB(255, 0, 0));
+        // HDC hTemp = GetDC(NULL);  // Get screen DC
+        // SelectObject(hTemp, pen);
+        // Rectangle(hTemp, x0, y0, x0 + ROI_W, y0 + ROI_H);
+        // DeleteObject(pen);
+        // ReleaseDC(NULL, hTemp);
+
         BITMAPINFOHEADER bi = {};
         bi.biSize        = sizeof(bi);
         bi.biWidth       = ROI_W;
