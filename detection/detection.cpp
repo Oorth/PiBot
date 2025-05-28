@@ -1,23 +1,29 @@
-// head_detect.cpp
-// Standalone C++ program using OpenCV to detect enemy heads and draw outlines
-// Usage: head_detect <input_image> <output_image>
 
-#include <opencv2/opencv.hpp>
+#define DEBUG 1
+
+#include <opencv2\opencv.hpp>
+// #include <opencv4/opencv2/opencv.hpp>
 #include <iostream>
 #include <vector>
 #include <cmath>
 #include <corecrt_math_defines.h>
+#include "DbgMacros.h"
 
-int main(int argc, char** argv) {
-    if (argc != 3) {
-        std::cerr << "Usage: " << argv[0] << " <input_image> <output_image>\n";
+int main(int argc, char** argv)
+{
+    if (argc != 3)
+    {
+        // std::cerr << "Usage: " << argv[0] << " <input_image> <output_image>\n";
+        fuk("Noob Give Image path and output img name");
         return -1;
     }
 
     // Load image
     cv::Mat img = cv::imread(argv[1]);
-    if (img.empty()) {
-        std::cerr << "Error: could not load image '" << argv[1] << "'\n";
+    if (img.empty())
+    {
+        // std::cerr << "Error: could not load image '" << argv[1] << "'\n";
+        fuk("could not load image");
         return -1;
     }
 
@@ -50,10 +56,12 @@ int main(int argc, char** argv) {
     // 4) Contour fallback with circularity filter
     std::vector<std::vector<cv::Point>> contours;
     cv::findContours(edges, contours, cv::RETR_EXTERNAL, cv::CHAIN_APPROX_SIMPLE);
+    
     struct Candidate { cv::Point2f center; float circ; };
     std::vector<Candidate> candidates;
 
-    for (auto &C : contours) {
+    for (auto &C : contours)
+    {
         double area = cv::contourArea(C);
         if (area < 100 || area > 5000) continue;
         double perimeter = cv::arcLength(C, true);
@@ -69,29 +77,28 @@ int main(int argc, char** argv) {
     // 5) Draw results on a copy
     cv::Mat output = img.clone();
     // Draw Hough circles in green
-    for (auto &v : circles) {
+    for (auto &v : circles)
+    {
         cv::Point center(cvRound(v[0]), cvRound(v[1]));
         int radius = cvRound(v[2]);
         cv::circle(output, center, radius, cv::Scalar(0,255,0), 2);
         cv::circle(output, center, 3, cv::Scalar(0,255,0), -1);
     }
     // Draw contour-based candidates in blue
-    for (auto &cand : candidates) {
+    for (auto &cand : candidates)
+    {
         cv::circle(output, cand.center, 15, cv::Scalar(255,0,0), 2);
     }
 
     // Save output
-    if (!cv::imwrite(argv[2], output)) {
-        std::cerr << "Error: could not write output '" << argv[2] << "'\n";
+    if (!cv::imwrite(argv[2], output))
+    {
+        // std::cerr << "Error: could not write output '" << argv[2] << "'\n";
+        fuk("could not write output");
         return -1;
     }
 
-    std::cout << "Detection complete. Output saved to " << argv[2] << "\n";
+    // std::cout << "Detection complete. Output saved to " << argv[2] << "\n";
+    ok("Detection complete. Output saved to ", argv[2], "\n");
     return 0;
 }
-
-/* Build Instructions:
- * Requires OpenCV (>=3.0)
- * g++ head_detect.cpp -o head_detect `pkg-config --cflags --libs opencv4`
- * Usage: ./head_detect frame_00031.jpg out.jpg
- */
